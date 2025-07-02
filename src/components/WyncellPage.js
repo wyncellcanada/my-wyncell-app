@@ -13,6 +13,7 @@ const ShoppingCartIcon = ({ className }) => <svg className={className} fill="non
 const SocialIcon = ({ href, children }) => <a href={href} className="text-gray-400 hover:text-white transition-colors duration-300">{children}</a>;
 const CloseIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>;
 const LanguageIcon = ({ className }) => <svg xmlns="http://www.w3.org/2000/svg" className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9 9 0 01-9-9 9 9 0 019-9m9 9a9 9 0 01-9 9m9-9H3m9 9a9 9 0 009-9M3 12a9 9 0 019-9m-9 9h18" /></svg>;
+const MenuIcon = ({ className }) => <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" /></svg>;
 
 
 // --- Multilingual Data Structure ---
@@ -362,6 +363,41 @@ const SignUpModal = ({ isOpen, onClose, text }) => {
     );
 };
 
+const MobileMenu = ({ isOpen, onClose, productOptions, activeProduct, setActiveProduct, text, setLanguage }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 bg-black/80 z-50 animate-fade-in md:hidden">
+            <div className="absolute top-0 right-0 h-full w-full max-w-xs bg-gray-900 shadow-lg p-6">
+                <button onClick={onClose} className="absolute top-5 right-5 text-gray-400 hover:text-white">
+                    <CloseIcon className="w-8 h-8" />
+                </button>
+                <nav className="mt-16 flex flex-col space-y-6">
+                    {productOptions.map(opt => (
+                        <button key={opt.id} onClick={() => { setActiveProduct(opt.id); onClose(); }}
+                            className={`px-4 py-3 font-semibold text-xl rounded-lg transition-all duration-300 flex items-center gap-3 ${activeProduct === opt.id ? 'bg-white text-gray-900' : 'text-gray-300 hover:bg-gray-800'}`}>
+                            <opt.icon className="w-6 h-6" />
+                            {opt.label}
+                        </button>
+                    ))}
+                </nav>
+                <div className="mt-8 border-t border-gray-700 pt-6 flex flex-col space-y-4">
+                    <a href="#" className="text-lg font-semibold text-gray-300 hover:text-white">{text.login}</a>
+                    <button onClick={() => { handleGetStartedClick(); onClose(); }} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-lg font-semibold">{text.signUp}</button>
+                </div>
+                 <div className="mt-8 border-t border-gray-700 pt-6">
+                    <h3 className="text-gray-400 font-semibold mb-3">Language</h3>
+                    <div className="flex flex-col items-start space-y-2">
+                       <a href="#" onClick={() => { setLanguage('en'); onClose(); }} className="text-lg text-gray-300 hover:text-white">English</a>
+                       <a href="#" onClick={() => { setLanguage('fr'); onClose(); }} className="text-lg text-gray-300 hover:text-white">Français</a>
+                       <a href="#" onClick={() => { setLanguage('sp'); onClose(); }} className="text-lg text-gray-300 hover:text-white">Español</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 
 export default function WyncellPage() {
   const [activeProduct, setActiveProduct] = useState('home');
@@ -370,6 +406,7 @@ export default function WyncellPage() {
   const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState(false);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const currentContent = useMemo(() => pageData[activeProduct][language], [activeProduct, language]);
   const text = useMemo(() => staticText[language], [language]);
@@ -392,8 +429,8 @@ export default function WyncellPage() {
   };
 
   const productOptions = [
-    { id: 'home', label: 'Home', icon: HomeIcon },
-    { id: 'business', label: 'Business', icon: BusinessIcon },
+    { id: 'home', label: text.footerServices.split(' ')[0], icon: HomeIcon },
+    { id: 'business', label: text.footerServices.split(' ')[1] || 'Business', icon: BusinessIcon },
     { id: 'global', label: 'Global eSIM', icon: GlobalIcon },
   ];
 
@@ -401,6 +438,15 @@ export default function WyncellPage() {
     <div className="font-sans antialiased bg-gray-50 text-gray-800">
       <AvailabilityModal isOpen={isAvailabilityModalOpen} onClose={() => setIsAvailabilityModalOpen(false)} onAvailable={handleAvailabilitySuccess} text={text} />
       <SignUpModal isOpen={isSignUpModalOpen} onClose={() => setIsSignUpModalOpen(false)} text={text} />
+      <MobileMenu 
+        isOpen={isMobileMenuOpen} 
+        onClose={() => setIsMobileMenuOpen(false)}
+        productOptions={productOptions}
+        activeProduct={activeProduct}
+        setActiveProduct={setActiveProduct}
+        text={text}
+        setLanguage={setLanguage}
+      />
 
       <div className="bg-orange-500 text-white text-center py-2 px-4 font-semibold">
         <a href="#free-esim" className="hover:underline">
@@ -441,6 +487,11 @@ export default function WyncellPage() {
                         </div>
                     )}
                </div>
+            </div>
+            <div className="md:hidden">
+                <button onClick={() => setIsMobileMenuOpen(true)} className="p-2 text-gray-300 hover:text-white">
+                    <MenuIcon className="w-8 h-8" />
+                </button>
             </div>
           </div>
         </div>
