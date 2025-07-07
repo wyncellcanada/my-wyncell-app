@@ -1,9 +1,8 @@
-import WyncellPage from '@/components/WyncellPage';
+// src/app/page.js
+import WyncellPage from "@/components/WyncellPage";
 
 export default function Home() {
   return (
-    <main>
-      <WyncellPage />
-    </main>
+    <WyncellPage />
   );
 }
