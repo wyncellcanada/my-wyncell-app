@@ -148,7 +148,7 @@ export default function EsimsPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {filteredPackages.length > 0 ? (
                 filteredPackages.map((pkg) => ( <PackageCard key={pkg.slug} pkg={pkg} /> ))
-            ) : ( <p className="text-center col-span-full py-10">No packages found for "{searchTerm}".</p> )}
+            ) : ( <p className="text-center col-span-full py-10">No packages found for '{searchTerm}'.</p> )}
           </div>
         )}
       </div>
