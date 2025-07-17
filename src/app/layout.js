@@ -8,7 +8,7 @@ import { CartProvider } from '../context/CartContext';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: "My Wyncell App",
+  title: "Wyncell Canada",
   description: "eSIMs for your travel needs",
 };
 
