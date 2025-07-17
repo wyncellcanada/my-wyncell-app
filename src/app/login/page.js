@@ -62,7 +62,7 @@ const LoginForm = () => {
                     {/* --- HCAPTCHA WIDGET WITH YOUR SITEKEY --- */}
                     <div 
                         className="h-captcha" 
-                        data-sitekey="3f3e4c46-9c4c-4e9c-b7b0-afa45900837e" // Your Sitekey has been added here.
+                        data-sitekey="8ac6bb1a-763c-4c6a-ae28-466cb7b6e436" // The sitekey has been updated to the correct one.
                     ></div>
 
                     {error && <p className="text-sm text-red-600 text-center">{error}</p>}
